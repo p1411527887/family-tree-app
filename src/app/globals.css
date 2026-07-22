@@ -1,26 +1,645 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Core brand (unified across app) */
+  --color-primary: #4B0082;
+  --color-secondary: #FFD700;
+  --color-accent: #C5A059;
+  --color-surface: #1A0F21;
+  --color-on-surface: #F2E8CF;
+  --color-wood: #2D1B10;
+  --color-gold-gradient-start: #FFD700;
+  --color-gold-gradient-end: #B8860B;
+  --color-background: #0F081A;
+  --color-outline: #C5A059;
+  --color-border-gold: #FFD700;
+
+  /* Material / Stitch token aliases used by login, members, news, profile */
+  --color-on-surface-variant: #D4AF37;
+  --color-primary-container: #4B0082;
+  --color-on-primary: #FFD700;
+  --color-on-primary-container: #ba7ef4;
+  --color-secondary-fixed: #ffe16d;
+  --color-secondary-fixed-dim: #e9c400;
+  --color-secondary-container: #ffdb3c;
+  --color-on-secondary: #3a3000;
+  --color-on-secondary-container: #725f00;
+  --color-surface-container: #251e1a;
+  --color-surface-container-low: #211a16;
+  --color-surface-container-high: #302924;
+  --color-surface-container-highest: #3b332f;
+  --color-surface-container-lowest: #130d09;
+  --color-surface-variant: #3b332f;
+  --color-surface-bright: #3f3833;
+  --color-surface-dim: #18120e;
+  --color-surface-imperial: #1A091F;
+  --color-tertiary: #ffb4a8;
+  --color-tertiary-container: #6b0000;
+  --color-on-tertiary: #690000;
+  --color-on-tertiary-container: #ff6955;
+  --color-on-tertiary-fixed: #410000;
+  --color-on-tertiary-fixed-variant: #8f0f07;
+  --color-tertiary-fixed: #ffdad4;
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error: #690005;
+  --color-on-error-container: #ffdad6;
+  --color-outline-variant: #4c4451;
+  --color-inverse-surface: #ede0d9;
+  --color-inverse-on-surface: #362f2a;
+  --color-inverse-primary: #7b41b3;
+  --color-on-background: #ede0d9;
+
+  /* Spacing */
+  --spacing-gutter: 24px;
+  --spacing-margin-desktop: 48px;
+  --spacing-margin-mobile: 16px;
+  --spacing-container-max: 1200px;
+  --spacing-max-width: 1280px;
+  --spacing-base: 8px;
+  --spacing-unit: 8px;
+  --spacing-section-gap: 64px;
+
+  /* Font families (wired to next/font CSS vars) */
+  --font-headline-xl: var(--font-cinzel), serif;
+  --font-headline-lg: var(--font-playfair), serif;
+  --font-headline-md: var(--font-playfair), serif;
+  --font-body-md: var(--font-lora), serif;
+  --font-body-lg: var(--font-lora), serif;
+  --font-label-md: var(--font-cinzel), serif;
+  --font-label-sm: var(--font-cinzel), serif;
+  --font-editorial: var(--font-lora), serif;
+  --font-caption: var(--font-playfair), serif;
+  --font-playfair: var(--font-playfair), serif;
+  --font-body: var(--font-lora), serif;
+  --font-headline: var(--font-playfair), serif;
+  --font-display-lg: var(--font-playfair), serif;
+  --font-display-lg-mobile: var(--font-playfair), serif;
+  --font-title-md: var(--font-playfair), serif;
+  --font-title-lg: var(--font-playfair), serif;
+
+  /* Type scale used as text-* utilities */
+  --text-display-lg: 3.5rem;
+  --text-display-lg--line-height: 1.1;
+  --text-display-lg-mobile: 2.25rem;
+  --text-display-lg-mobile--line-height: 1.15;
+  --text-headline-xl: 3rem;
+  --text-headline-xl--line-height: 1.15;
+  --text-headline-md: 1.75rem;
+  --text-headline-md--line-height: 1.3;
+  --text-title-lg: 1.375rem;
+  --text-title-lg--line-height: 1.35;
+  --text-title-md: 1.125rem;
+  --text-title-md--line-height: 1.4;
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.6;
+  --text-body-md: 1rem;
+  --text-body-md--line-height: 1.6;
+  --text-label-md: 0.75rem;
+  --text-label-md--line-height: 1.4;
+  --text-label-sm: 0.6875rem;
+  --text-label-sm--line-height: 1.4;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Base ─────────────────────────────────────────── */
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #1a0f12;
+  background-image:
+    linear-gradient(rgba(26, 15, 33, 0.92), rgba(26, 15, 33, 0.92)),
+    url("https://www.transparenttextures.com/patterns/dark-wood.png");
+  color: var(--color-on-surface);
+}
+
+/* ─── Shared decorative ────────────────────────────── */
+.imperial-border {
+  border: 2px solid #ffd700;
+  position: relative;
+  box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.gold-text {
+  background: linear-gradient(to bottom, #ffd700 22%, #d4af37 40%, #ffd700 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.3));
+}
+
+.gold-gradient-text {
+  background: linear-gradient(to bottom, #fff8dc 0%, #ffd700 50%, #b8860b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-text-glow {
+  text-shadow: 0 0 10px rgba(255, 225, 109, 0.5);
+}
+
+.gold-glow {
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.text-glow {
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.citadel-pattern {
+  background-image: radial-gradient(
+    circle at 2px 2px,
+    rgba(255, 215, 0, 0.05) 1px,
+    transparent 0
+  );
+  background-size: 60px 60px;
+}
+
+.ornate-corner {
+  position: relative;
+}
+.ornate-corner::before {
+  content: "✦";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  color: #ffd700;
+  font-size: 24px;
+}
+
+.silk-texture {
+  background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+}
+
+.royal-gradient {
+  background: linear-gradient(135deg, #4b0082 0%, #2a004d 100%);
+}
+
+.gold-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ffd700, transparent);
+  width: 100%;
+  position: relative;
+}
+.gold-divider::after {
+  content: "⬥";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffd700;
+  font-size: 20px;
+  background: #120b02;
+  padding: 0 10px;
+}
+
+.portrait-frame {
+  padding: 8px;
+  background: #2d1b10;
+  border: 2px solid #ffd700;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* ─── Cards & frames ───────────────────────────────── */
+.imperial-card {
+  background-image: linear-gradient(
+      rgba(75, 0, 130, 0.9),
+      rgba(40, 0, 70, 0.95)
+    ),
+    url("https://www.transparenttextures.com/patterns/dark-wood.png");
+  background-blend-mode: overlay;
+  background-size: 400px;
+  border: 2px solid #ffd700;
+  box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.imperial-card::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  pointer-events: none;
+}
+
+.imperial-frame {
+  border: 2px solid #e9c400;
+  position: relative;
+  background: rgba(75, 0, 130, 0.85);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(233, 196, 0, 0.1);
+}
+.imperial-frame::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(233, 196, 0, 0.4);
+  pointer-events: none;
+}
+
+.imperial-container {
+  background: linear-gradient(135deg, rgba(75, 0, 130, 0.85) 0%, rgba(40, 0, 70, 0.95) 100%);
+  border: 2px solid #d4af37;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.imperial-scroll {
+  background: linear-gradient(
+    to right,
+    #2c1a1a 0%,
+    #3e2b2b 5%,
+    #ede0d9 15%,
+    #ede0d9 85%,
+    #3e2b2b 95%,
+    #2c1a1a 100%
+  );
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.imperial-header {
+  background-color: #2d0b2d;
+  background-image: url("https://www.transparenttextures.com/patterns/dark-wood.png");
+  background-size: 300px;
+  background-blend-mode: multiply;
+}
+
+.artifact-frame {
+  padding: 12px;
+  background: #2d1b4d;
+  border: 1px solid #ffd700;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.scroll-card {
+  background: linear-gradient(to bottom, #fdfbfb 0%, #ebedee 100%);
+  color: #1a1c1a;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.scroll-card::before,
+.scroll-card::after {
+  content: "";
+  position: absolute;
+  left: -10px;
+  right: -10px;
+  height: 20px;
+  background: #b8860b;
+  border-radius: 10px;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+.scroll-card::before {
+  top: -10px;
+}
+.scroll-card::after {
+  bottom: -10px;
+}
+
+.gold-frame {
+  border: 4px double #d4af37;
+  padding: 2px;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+.gold-border-double {
+  border: 3px double #ffe16d;
+}
+.gold-border-single {
+  border: 1px solid #ffe16d;
+}
+.gold-border-gradient {
+  border-image: linear-gradient(to bottom, #ffd700, #8b6508) 1;
+}
+
+/* ─── Buttons ──────────────────────────────────────── */
+.btn-imperial {
+  background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+  color: #4b0082;
+  border: 1px solid #fff8dc;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+.btn-imperial:hover {
+  filter: brightness(1.08);
+}
+.btn-imperial:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-imperial-outline {
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.05);
+  cursor: pointer;
+}
+
+.btn-gold-inlay {
+  background: #e9c400;
+  color: #4a0080;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.5), 0 4px 12px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+.btn-gold-inlay:hover {
+  transform: translateY(-2px);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.5), 0 8px 16px rgba(0, 0, 0, 0.5);
+  background: #ffe16d;
+}
+.btn-gold-inlay:active {
+  transform: translateY(1px);
+}
+
+/* ─── Corners & motifs ─────────────────────────────── */
+.corner-accent {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ffd700;
+  pointer-events: none;
+}
+.top-left {
+  top: -2px;
+  left: -2px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.top-right {
+  top: -2px;
+  right: -2px;
+  border-left: 0;
+  border-bottom: 0;
+}
+.bottom-left {
+  bottom: -2px;
+  left: -2px;
+  border-right: 0;
+  border-top: 0;
+}
+.bottom-right {
+  bottom: -2px;
+  right: -2px;
+  border-left: 0;
+  border-top: 0;
+}
+
+.corner-motif {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  z-index: 10;
+  pointer-events: none;
+}
+.corner-tl {
+  top: -10px;
+  left: -10px;
+  border-top: 15px solid #e9c400;
+  border-left: 15px solid #e9c400;
+}
+.corner-tr {
+  top: -10px;
+  right: -10px;
+  border-top: 15px solid #e9c400;
+  border-right: 15px solid #e9c400;
+}
+.corner-bl {
+  bottom: -10px;
+  left: -10px;
+  border-bottom: 15px solid #e9c400;
+  border-left: 15px solid #e9c400;
+}
+.corner-br {
+  bottom: -10px;
+  right: -10px;
+  border-bottom: 15px solid #e9c400;
+  border-right: 15px solid #e9c400;
+}
+
+.ornamental-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #e9c400 50%, transparent 100%);
+  margin: 24px 0;
+  position: relative;
+}
+.ornamental-divider::after {
+  content: "◆";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #e9c400;
+  font-size: 14px;
+  background: #4b0082;
+  padding: 0 8px;
+}
+
+/* ─── Forms ────────────────────────────────────────── */
+.input-decree {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 2px solid rgba(233, 196, 0, 0.3) !important;
+  color: #ede0d9 !important;
+  transition: all 0.3s ease;
+}
+.input-decree:focus {
+  border-bottom-color: #e9c400 !important;
+  box-shadow: none !important;
+  padding-left: 8px;
+  outline: none;
+}
+
+/* ─── Members / gallery ────────────────────────────── */
+.silk-overlay {
+  background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+  background-blend-mode: overlay;
+  background-size: 400px;
+}
+
+.member-card-hover {
+  transition: all 0.5s ease;
+}
+.member-card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+}
+
+.red-seal {
+  background-color: #6b0000;
+  border: 2px solid #ffdad4;
+  transform: rotate(-5deg);
+}
+
+.seal-red {
+  background: #93000a;
+  border: 2px solid #ffdad6;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* ─── Layout helpers ───────────────────────────────── */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 32px;
+}
+
+.active-nav {
+  background-color: rgba(212, 175, 55, 0.2);
+  border-left: 4px solid #ffd700;
+  color: #ffd700;
+}
+
+.sidebar-active {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.2) 0%, transparent 100%);
+  border-left: 3px solid #ffd700;
+}
+
+.nav-link-active {
+  color: #d4af37;
+  border-bottom: 2px solid #d4af37;
+}
+
+.hover-glow:hover {
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+}
+
+.scroll-reveal {
+  opacity: 1;
+  transform: none;
+}
+
+.motif-divider {
+  height: 60px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
+  opacity: 0.6;
+}
+
+.ornate-border {
+  border-style: double;
+  border-width: 4px;
+  border-color: #ffd700;
+}
+
+.lacquer-bg {
+  background-image: linear-gradient(rgba(24, 18, 14, 0.85), rgba(24, 18, 14, 0.95)),
+    url("https://www.transparenttextures.com/patterns/dark-wood.png");
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.wood-bg {
+  background-image: url("https://www.transparenttextures.com/patterns/dark-wood.png");
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.viet-cloud-bg {
+  background-image: radial-gradient(circle at top right, rgba(255, 225, 109, 0.05), transparent),
+    url("https://www.transparenttextures.com/patterns/black-paper.png");
+}
+
+.p-unit {
+  padding: var(--spacing-unit);
+}
+
+.max-w-max-width {
+  max-width: var(--spacing-max-width);
+}
+
+/* Analytics uses gold as accent via secondary; remap common primary text on analytics canvas */
+.analytics-theme .text-primary {
+  color: var(--color-secondary);
+}
+.analytics-theme .text-primary\/80 {
+  color: color-mix(in srgb, var(--color-secondary) 80%, transparent);
+}
+.analytics-theme .text-primary\/70 {
+  color: color-mix(in srgb, var(--color-secondary) 70%, transparent);
+}
+.analytics-theme .text-primary\/60 {
+  color: color-mix(in srgb, var(--color-secondary) 60%, transparent);
+}
+.analytics-theme .text-primary\/50 {
+  color: color-mix(in srgb, var(--color-secondary) 50%, transparent);
+}
+.analytics-theme .border-primary {
+  border-color: var(--color-secondary);
+}
+.analytics-theme .border-primary\/50 {
+  border-color: color-mix(in srgb, var(--color-secondary) 50%, transparent);
+}
+.analytics-theme .border-primary\/40 {
+  border-color: color-mix(in srgb, var(--color-secondary) 40%, transparent);
+}
+.analytics-theme .border-primary\/30 {
+  border-color: color-mix(in srgb, var(--color-secondary) 30%, transparent);
+}
+.analytics-theme .border-primary\/20 {
+  border-color: color-mix(in srgb, var(--color-secondary) 20%, transparent);
+}
+.analytics-theme .border-primary\/10 {
+  border-color: color-mix(in srgb, var(--color-secondary) 10%, transparent);
+}
+.analytics-theme .bg-primary {
+  background-color: var(--color-secondary);
+}
+.analytics-theme .bg-primary\/10 {
+  background-color: color-mix(in srgb, var(--color-secondary) 10%, transparent);
+}
+.analytics-theme .bg-primary\/5 {
+  background-color: color-mix(in srgb, var(--color-secondary) 5%, transparent);
+}
+.analytics-theme .to-primary {
+  --tw-gradient-to: var(--color-secondary);
+}
+.analytics-theme .from-transparent {
+  --tw-gradient-from: transparent;
+}
+
+/* Toast feedback */
+.toast-banner {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background: linear-gradient(135deg, #4b0082, #2a004d);
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-label-md);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: toast-in 0.3s ease;
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0f081a;
+}
+::-webkit-scrollbar-thumb {
+  background: #4b0082;
+  border: 1px solid #ffd700;
 }

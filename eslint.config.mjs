@@ -13,6 +13,13 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      // Many prototype assets are remote signed URLs; RemoteImage wraps next/image.
+      // Remaining raw <img> in legacy pages are transitional.
+      "@next/next/no-img-element": "warn",
+    },
+  },
 ]);
 
 export default eslintConfig;

@@ -1,0 +1,48 @@
+{
+  "treeData": {
+    "id": "root",
+    "name": "Nguyễn Văn Khởi",
+    "role": "Cụ Tổ",
+    "dob": "1920 - 1995",
+    "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuD0cWl9vpNJfW62iKkwsxUWNH9kQyB-ymE9D4zd7Rj5T4Y9YH6ox010MXuWJnhR8dYam1MCj7E8MRhoSDTfYqqIkGlwBICYNsRVKUd3dZAxCRrJ-Dm71fXLXVpGd-qU0NacyTBSEITFCPs2KHPqYwFx45QCYk7Ie8pQm78XUUfswLdu8Nhiwj78k8PupAhLgq_mTjLgJQraqxKZ2FqniOfVLi1M_SjnxCKXfb7HsNZkqjZCMxvadNP-kygp5NNrnSyofkZGD9pIzU0",
+    "spouse": {
+      "name": "Lê Thị Ngọc",
+      "role": "Bà Cố",
+      "dob": "1925 - 2005",
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDHwb6yNlDK2tfkl7y7DwxjW8TR_zs6q9uE-1pSLK6Jvy9VzcBwTYz9Zk50zmOd3kvVAUXXfekgTbxwqsB4JbJmXRgl-ZdTXEAetaOCIYxMeQRFI7axnxpzsP5F_bHIJFceP4zKbyTklOiaKFIj6B10thfbgZHXUSD0VFRwVWK3OA6ungqiBxLh28bmfCM1HWLiP5UepMz2UdE8OKar-lOdudbii40D5gXCTHN1D8zXXefRiQGPjY3uGmoCjMEmHJrIzDxOUT-Qq2o"
+    },
+    "children": [
+      {
+        "id": "gen2-1",
+        "name": "Nguyễn Hữu Đức",
+        "role": "Cha",
+        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDn3uTtKTSSUXVOQstCHDHg7ThlCm8EushlKxCvUVcIXaHxWXy0tuIf19rSErJMU-stYOjCfP8ORTSf1ure7OhDaeaJeiITUQ-y_e4_n3ni7JCkmFhhGBLFpdFShsaWXEWJJu6gmV0A5Os6ZQ0c1hcPHSlKLjK81uX9pGj0vxiOgI1TGYHmd5mj64CSwHVRgfeeje9k5C57ugCOtYGnoz4TvqaFRz6ErocWGASDdgqNk3Mk450Q74I1awpdf825YRqJbAJ3NQemjl0",
+        "spouse": {
+          "name": "Trần Thị Lan",
+          "role": "Mẹ",
+          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuB68EVY5lmyWI8slryq3sFwt35CVSGnytP7TxIytJbLGJTeVuhHon4EutKwiA-ROGT3_z5EUd6a_9lJ42LqY5HjUqjhY5mOHze7zoUxlols0lWDj2nt4o_DGty96OqesmV-hy4bNUYZIC0sO1EyAgdr6qZaI2-ruXlMubJ1ijeAFJwgzSrCespJtS1JQE3xnIU_TubAYRVUUkxegaGnUne3Hddc6PPBva4OIO9lg1_dpGnU452-NFEEDfteb9lJ__D70xniND5XO4s"
+        },
+        "children": [
+          {
+            "id": "gen3-1",
+            "name": "Nguyễn Minh",
+            "role": "Con Trưởng",
+            "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuCnVtuj_WGeWkuhMpCEIvNL-Nis3EDAQTFF_2HY-g4GO34Du833c3BKW4duKNEkDx6GelvLlJTmQRv9Hvx9RO8MprjO0Y7_bwQ_I9uVoD_GR1qcgkoU7QZv_bwSFdZfwvmAB9pUCdVIIW7OphHFeWj8IQxuOGduJt1uCo0vDpZUL11gPRQ32wTnbVtaHpOWBkL0vNqXD4dRIYQVuz0y_2QXWooZhxKv2yCyJZlKHbK1osVyjUvlt9VwDeXm-pk_5UScZIhx-cfhOS4"
+          },
+          {
+            "id": "gen3-2",
+            "name": "Nguyễn Ngọc",
+            "role": "Con Gái",
+            "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAvz17_GzAh1NzWdExoeTnLsW_7INDx7j_-ioi0q7IvoawwyXUABfjGiBXLdUHK-gzB7G0ygWkUejcImrb8X-OYFs0O6qNFJkAvhU10KpVKsFFy2lCLh8HRq1CrT78g7D0XqsUyacFOJcRKZqRfh0E4kX4sBpBgmcRxFv8ZEDDX3-YVhbwT2jVPlXugegR3O632DemRCChaGsgBa0ixLi6hz-BuIKr5uQ3qYz0wVrnoKn8IoxmhwAMUwcanyBFUrsz_FhOM5018q5A"
+          },
+          {
+            "id": "gen3-3",
+            "name": "Nguyễn Hoàng",
+            "role": "Con Út",
+            "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuCkNVCE6bp6aDuIbViU_9-gx2VeOEBGMjkQwIZSJzXLWYSZdUWrqxrd3Qkpp5BQT6CQ2vS_C7OCXIVExiTuGYRq9fPRC_AVPNfiPgWTebhcxqjTTCZepUqDC1NBeUBD8iS5ca9nOxgTFOkz3gqk2RNAyIV4ZRlaF7t0RVyQAk4xzDYD871__fFxUr-VK_FWUd-NcKSYKV01N1s8DhxiA8hYXMAExQG4ahW42USySSRmr0cJzOt055qV_zzJrU771AA42MuuNfk_LNs"
+          }
+        ]
+      }
+    ]
+  }
+}

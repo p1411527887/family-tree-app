@@ -4,23 +4,48 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "eslint"
+    "start:prod": "sh -c 'set -a; . ./.env.local; set +a; prisma db push && next start'",
+    "lint": "eslint",
+    "test": "tsx --test src/**/*.test.ts",
+    "test:smoke": "node --env-file=.env.local scripts/smoke.mjs",
+    "db:migrate": "sh -c 'set -a; . ./.env.local; set +a; prisma migrate dev'",
+    "db:deploy": "sh -c 'set -a; . ./.env.local; set +a; prisma db push'",
+    "db:push": "sh -c 'set -a; . ./.env.local; set +a; prisma db push'",
+    "db:seed": "sh -c 'set -a; . ./.env.local; set +a; tsx prisma/seed.ts'",
+    "db:setup": "sh -c 'set -a; . ./.env.local; set +a; prisma db push && tsx prisma/seed.ts'",
+    "db:reset": "sh -c 'set -a; . ./.env.local; set +a; prisma migrate reset --force'",
+    "postinstall": "prisma generate"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "bcryptjs": "^3.0.3",
+    "framer-motion": "^12.42.2",
+    "lucide-react": "^1.25.0",
     "next": "16.2.11",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-zoom-pan-pinch": "^4.0.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.11",
+    "prisma": "^6.19.3",
     "tailwindcss": "^4",
+    "tsx": "^4.20.5",
     "typescript": "^5"
+  },
+  "overrides": {
+    "sharp": "^0.35.3",
+    "postcss": "^8.5.21"
   }
 }

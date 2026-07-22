@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gia Phả Dòng Họ (Next.js + Prisma + Docker Postgres)
 
-## Getting Started
+Ứng dụng web gia phả với backend PostgreSQL chạy bằng Docker, auth có hash mật khẩu, admin lưu server, newsletter/contact API và audit log.
 
-First, run the development server:
+## Yêu cầu
+
+- Node.js 20+
+- Docker Desktop
+- Sao chép env:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
+# openssl rand -base64 48  → AUTH_SECRET
+# Đặt AUTH_ADMIN_USERNAME / AUTH_ADMIN_PASSWORD (dùng khi seed)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Biến | Mô tả |
+|------|------|
+| `AUTH_SECRET` | Secret HMAC phiên (≥ 32 ký tự) |
+| `AUTH_ADMIN_USERNAME` | User admin khi seed |
+| `AUTH_ADMIN_PASSWORD` | Mật khẩu seed (≥ 8 ký tự), lưu bcrypt trong DB |
+| `DATABASE_URL` | Postgres Docker local: `localhost:5433/family_tree_app` |
+| `ALLOW_DATA_FALLBACK` | `1`/`0` — bật/tắt fallback `data.json` khi DB trống/lỗi (mặc định: bật ngoài production) |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Chạy Local Bằng Docker DB
 
-## Learn More
+```bash
+npm install
+docker compose up -d postgres
+npm run db:setup
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Mặc định app chạy tại:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+http://localhost:3000
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Postgres chạy tại:
 
-## Deploy on Vercel
+```bash
+localhost:5433
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run build        # prisma generate + next build
+npm run start        # next start
+npm run start:prod   # db push + next start
+npm run lint
+npm test
+npm run test:smoke   # cần server + .env.local
+npm run db:push      # sync schema vào Docker Postgres
+npm run db:seed      # seed admin + dữ liệu mẫu
+npm run db:setup     # db push + seed
+npm run db:reset
+```
+
+## Kiến Trúc Dữ Liệu
+
+- Prisma + PostgreSQL
+- Docker Compose service: `postgres`
+- Bảng: `User`, `FamilyMember` (FK `parentId`), `AdminRequest`, `NewsletterSubscription`, `ContactMessage`, `NewsArticle`, `FamilyEvent`, `AuditLog`
+- Session cookie `family_tree_session` = `payload.HMAC`
+- Edge proxy bảo vệ `/admin`
+- Login dùng bcrypt so khớp `User.passwordHash` + rate limit
+- Admin duyệt/bác, thêm nhân khẩu, chiếu chỉ → DB + audit
+- Newsletter/Contact → DB
+
+## API Chính
+
+| Method | Path | Mô tả |
+|--------|------|------|
+| POST | `/api/auth/login` | Đăng nhập |
+| POST | `/api/auth/logout` | Đăng xuất |
+| POST | `/api/newsletter` | Đăng ký email |
+| POST | `/api/contact` | Form liên hệ |
+| GET | `/api/members` | Danh sách thành viên |
+| GET | `/api/tree` | Cây gia phả |
+| GET/PATCH/POST | `/api/admin/requests` | Sớ ký admin |
+| GET/POST | `/api/admin/members` | Nhân khẩu admin |
+| GET | `/api/admin/audit` | Audit log |
+| GET | `/api/news` | Tin tức |
+| GET | `/api/events` | Sự kiện |
+
+## Bảo mật
+
+Kế hoạch kiểm thử bảo mật (OWASP ASVS L2, inventory API, auth/session, CSRF, DAST, checklist):
+
+- [`docs/security-test-plan.md`](./docs/security-test-plan.md)
+
+## Production Checklist
+
+- [ ] Đổi `AUTH_SECRET` và mật khẩu admin mạnh
+
+- [ ] Dùng managed Postgres thay Docker local
+- [ ] Backup DB
+- [ ] HTTPS + secure cookies
+- [ ] Rate limit phân tán nếu scale nhiều instance
+- [ ] Object storage cho ảnh
+- [ ] Email provider cho newsletter
+- [ ] Migration strategy rõ ràng trước production thật
+- [ ] Production: seed DB thật, `ALLOW_DATA_FALLBACK=0` (không dùng data.json làm nguồn live)
+- [ ] Analytics/gender: thêm field giới tính chính thức nếu cần KPI chính xác
+

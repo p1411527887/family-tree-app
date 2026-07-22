@@ -1,0 +1,126 @@
+// Family tree data model — PostgreSQL for local Docker and production-like development.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  member
+}
+
+enum RequestStatus {
+  pending
+  approved
+  rejected
+}
+
+model User {
+  id           String     @id @default(cuid())
+  username     String     @unique
+  passwordHash String
+  role         Role       @default(admin)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  auditLogs    AuditLog[]
+}
+
+model FamilyMember {
+  id         String         @id
+  name       String
+  role       String
+  generation String
+  branch     String
+  quote      String         @default("")
+  image      String         @default("")
+  dob        String?
+  birthYear  String?
+  deathYear  String?
+  residence  String?
+  /// JSON string array of biography paragraphs
+  biography  String         @default("[]")
+  verified   Boolean        @default(false)
+  parentId   String?
+  parent     FamilyMember?  @relation("MemberParent", fields: [parentId], references: [id], onDelete: SetNull)
+  children   FamilyMember[] @relation("MemberParent")
+  /// Linked spouse member id (no FK to avoid circular constraints)
+  spouseId   String?
+  sortOrder  Int            @default(0)
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+}
+
+model AdminRequest {
+  id         String        @id @default(cuid())
+  name       String
+  branch     String
+  detail     String
+  image      String        @default("")
+  status     RequestStatus @default(pending)
+  createdAt  DateTime      @default(now())
+  reviewedAt DateTime?
+  reviewedBy String?
+}
+
+model NewsletterSubscription {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String   @default("footer")
+  createdAt DateTime @default(now())
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+  handled   Boolean  @default(false)
+}
+
+model NewsArticle {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  category    String
+  excerpt     String
+  body        String
+  image       String   @default("")
+  published   Boolean  @default(true)
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+}
+
+model FamilyEvent {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  era       String
+  yearLabel String
+  category  String
+  body      String
+  cta       String   @default("Xem chi tiết")
+  image     String   @default("")
+  imageAlt  String   @default("")
+  reverse   Boolean  @default(false)
+  published Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  actor     User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  action    String
+  entity    String?
+  entityId  String?
+  /// JSON metadata
+  meta      String?
+  createdAt DateTime @default(now())
+}
