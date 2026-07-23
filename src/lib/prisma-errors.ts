@@ -19,6 +19,11 @@ export function isRecordNotFoundError(error: unknown): boolean {
   return getPrismaErrorCode(error) === "P2025";
 }
 
+/** Serializable transaction conflicted or deadlocked and may be retried. */
+export function isTransactionConflictError(error: unknown): boolean {
+  return getPrismaErrorCode(error) === "P2034";
+}
+
 /**
  * DB not ready / unreachable — typically missing migrate, wrong DATABASE_URL,
  * or table missing after a fresh deploy.

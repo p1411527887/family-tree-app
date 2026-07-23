@@ -8,6 +8,15 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 
+type MemberItem = {
+  id: string;
+  name: string;
+  role: string;
+  generation: string;
+  branch: string;
+  parentId: string | null;
+};
+
 type RequestItem = {
   id: string;
   name: string;
@@ -28,33 +37,41 @@ type AuditItem = {
   actor?: { username: string } | null;
 };
 
+const emptyMemberForm = {
+  id: "",
+  name: "",
+  role: "Thành viên",
+  generation: "Đời thứ 14",
+  branch: "Chi chính",
+  parentId: "",
+};
+
 export default function AdminPage() {
   const router = useRouter();
+  const [members, setMembers] = useState<MemberItem[]>([]);
   const [requests, setRequests] = useState<RequestItem[]>([]);
   const [audit, setAudit] = useState<AuditItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState<string | null>(null);
-  const [memberForm, setMemberForm] = useState({
-    name: "",
-    role: "Thành viên",
-    generation: "Đời thứ 14",
-    branch: "Chi chính",
-  });
+  const [memberForm, setMemberForm] = useState(emptyMemberForm);
   const [showMemberForm, setShowMemberForm] = useState(false);
   const [decree, setDecree] = useState("");
 
   const load = useCallback(async () => {
     try {
-      const [reqRes, auditRes] = await Promise.all([
+      const [memberRes, reqRes, auditRes] = await Promise.all([
+        fetch("/api/admin/members"),
         fetch("/api/admin/requests"),
         fetch("/api/admin/audit"),
       ]);
-      if (reqRes.status === 401 || auditRes.status === 401) {
+      if ([memberRes, reqRes, auditRes].some((res) => res.status === 401)) {
         router.push("/login?next=/admin");
         return;
       }
+      const memberJson = (await memberRes.json()) as { ok?: boolean; items?: MemberItem[] };
       const reqJson = (await reqRes.json()) as { ok?: boolean; items?: RequestItem[] };
       const auditJson = (await auditRes.json()) as { ok?: boolean; items?: AuditItem[] };
+      if (memberJson.ok && memberJson.items) setMembers(memberJson.items);
       if (reqJson.ok && reqJson.items) setRequests(reqJson.items);
       if (auditJson.ok && auditJson.items) setAudit(auditJson.items);
     } catch {
@@ -64,35 +81,10 @@ export default function AdminPage() {
     }
   }, [router]);
 
-  // Initial client fetch (session cookie). setState runs after await, not sync in effect body.
   useEffect(() => {
-    let cancelled = false;
-    void (async () => {
-      try {
-        const [reqRes, auditRes] = await Promise.all([
-          fetch("/api/admin/requests"),
-          fetch("/api/admin/audit"),
-        ]);
-        if (cancelled) return;
-        if (reqRes.status === 401 || auditRes.status === 401) {
-          router.push("/login?next=/admin");
-          return;
-        }
-        const reqJson = (await reqRes.json()) as { ok?: boolean; items?: RequestItem[] };
-        const auditJson = (await auditRes.json()) as { ok?: boolean; items?: AuditItem[] };
-        if (cancelled) return;
-        if (reqJson.ok && reqJson.items) setRequests(reqJson.items);
-        if (auditJson.ok && auditJson.items) setAudit(auditJson.items);
-      } catch {
-        if (!cancelled) setToast("Không tải được dữ liệu quản trị.");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [router]);
+    const timeout = window.setTimeout(() => void load(), 0);
+    return () => window.clearTimeout(timeout);
+  }, [load]);
 
 
   const pendingCount = requests.filter((r) => r.status === "pending").length;
@@ -118,21 +110,40 @@ export default function AdminPage() {
     router.refresh();
   }
 
-  async function onAddMember(e: FormEvent) {
+  async function onSaveMember(e: FormEvent) {
     e.preventDefault();
+    const editing = Boolean(memberForm.id);
     const res = await fetch("/api/admin/members", {
-      method: "POST",
+      method: editing ? "PATCH" : "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(memberForm),
     });
     const data = (await res.json()) as { ok?: boolean; error?: string; item?: { id: string } };
     if (!res.ok || !data.ok) {
-      setToast(data.error || "Không thêm được nhân khẩu.");
+      setToast(data.error || "Không lưu được nhân khẩu.");
       return;
     }
-    setToast(`Đã thêm thành viên (id: ${data.item?.id}).`);
+    setToast(editing ? "Đã cập nhật nhân khẩu." : `Đã thêm thành viên (id: ${data.item?.id}).`);
     setShowMemberForm(false);
-    setMemberForm({ name: "", role: "Thành viên", generation: "Đời thứ 14", branch: "Chi chính" });
+    setMemberForm(emptyMemberForm);
+    await load();
+  }
+
+  function editMember(member: MemberItem) {
+    setMemberForm({ ...member, parentId: member.parentId ?? "" });
+    setShowMemberForm(true);
+    document.getElementById("member-form")?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  async function deleteMember(member: MemberItem) {
+    if (!window.confirm(`Xóa ${member.name} khỏi gia phả?`)) return;
+    const res = await fetch(`/api/admin/members?id=${encodeURIComponent(member.id)}`, { method: "DELETE" });
+    const data = (await res.json()) as { ok?: boolean; error?: string };
+    if (!res.ok || !data.ok) {
+      setToast(data.error || "Không xóa được nhân khẩu.");
+      return;
+    }
+    setToast(`Đã xóa ${member.name}.`);
     await load();
   }
 
@@ -210,7 +221,10 @@ export default function AdminPage() {
               <button
                 type="button"
                 className="btn-imperial px-8 py-4 flex items-center gap-3"
-                onClick={() => setShowMemberForm((v) => !v)}
+                onClick={() => {
+                  setMemberForm(emptyMemberForm);
+                  setShowMemberForm(true);
+                }}
               >
                 <span className="material-symbols-outlined !text-primary" aria-hidden>
                   person_add
@@ -234,8 +248,10 @@ export default function AdminPage() {
           </div>
 
           {showMemberForm && (
-            <form onSubmit={onAddMember} className="imperial-card p-8 grid md:grid-cols-2 gap-4">
-              <h2 className="md:col-span-2 font-playfair text-xl gold-gradient-text">Thêm nhân khẩu mới</h2>
+            <form id="member-form" onSubmit={onSaveMember} className="imperial-card p-8 grid md:grid-cols-2 gap-4">
+              <h2 className="md:col-span-2 font-playfair text-xl gold-gradient-text">
+                {memberForm.id ? "Chỉnh sửa nhân khẩu" : "Thêm nhân khẩu mới"}
+              </h2>
               {(
                 [
                   ["name", "Họ tên"],
@@ -248,35 +264,99 @@ export default function AdminPage() {
                   {label}
                   <input
                     required={key === "name"}
-                    className="mt-1 w-full bg-black/30 border border-secondary/30 px-3 py-2 text-on-surface"
+                    className="mt-1 min-h-11 w-full bg-black/30 border border-secondary/30 px-3 py-2 text-on-surface focus:border-secondary focus:outline-none"
                     value={memberForm[key]}
-                    onChange={(e) => setMemberForm((f) => ({ ...f, [key]: e.target.value }))}
+                    onChange={(e) => setMemberForm((form) => ({ ...form, [key]: e.target.value }))}
                   />
                 </label>
               ))}
-              <div className="md:col-span-2 flex gap-3">
+              <label className="block text-sm text-secondary/80 md:col-span-2">
+                Cha hoặc mẹ
+                <select
+                  className="mt-1 min-h-11 w-full bg-black/30 border border-secondary/30 px-3 py-2 text-on-surface focus:border-secondary focus:outline-none"
+                  value={memberForm.parentId}
+                  onChange={(e) => setMemberForm((form) => ({ ...form, parentId: e.target.value }))}
+                >
+                  <option value="">Chưa xác định</option>
+                  {members.filter((member) => member.id !== memberForm.id).map((member) => (
+                    <option key={member.id} value={member.id}>{member.name} · {member.generation}</option>
+                  ))}
+                </select>
+              </label>
+              <div className="md:col-span-2 flex flex-wrap gap-3">
                 <button type="submit" className="btn-imperial px-6 py-3">
-                  Lưu vào CSDL
+                  {memberForm.id ? "Lưu thay đổi" : "Thêm vào gia phả"}
                 </button>
-                <button type="button" className="btn-imperial-outline px-6 py-3" onClick={() => setShowMemberForm(false)}>
+                <button
+                  type="button"
+                  className="btn-imperial-outline px-6 py-3"
+                  onClick={() => {
+                    setShowMemberForm(false);
+                    setMemberForm(emptyMemberForm);
+                  }}
+                >
                   Hủy
                 </button>
               </div>
             </form>
           )}
 
+          <section className="imperial-card overflow-hidden" aria-labelledby="member-list-title">
+            <div className="p-6 border-b border-secondary/20 flex flex-wrap items-center justify-between gap-3 bg-primary/20">
+              <div>
+                <h2 id="member-list-title" className="font-playfair text-2xl font-bold gold-gradient-text">Nhân khẩu trong gia phả</h2>
+                <p className="mt-1 text-sm text-secondary/60">{members.length} thành viên · chọn một người để chỉnh sửa hoặc xóa.</p>
+              </div>
+              <button type="button" className="btn-imperial-outline min-h-11 px-5" onClick={() => void load()}>
+                Tải lại
+              </button>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[720px] text-left border-collapse">
+                <thead>
+                  <tr className="bg-black/30 border-b border-secondary/10 text-xs uppercase tracking-widest text-secondary/60">
+                    <th className="px-6 py-4">Họ tên</th>
+                    <th className="px-6 py-4">Đời · Chi</th>
+                    <th className="px-6 py-4">Vai trò</th>
+                    <th className="px-6 py-4 text-right">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-secondary/10">
+                  {members.map((member) => (
+                    <tr key={member.id} className="hover:bg-secondary/5">
+                      <td className="px-6 py-4 font-playfair font-bold text-secondary">{member.name}</td>
+                      <td className="px-6 py-4 text-sm text-on-surface/70">{member.generation} · {member.branch}</td>
+                      <td className="px-6 py-4 text-sm text-on-surface/70">{member.role}</td>
+                      <td className="px-6 py-4 text-right whitespace-nowrap">
+                        <button type="button" className="min-h-11 px-4 text-sm text-secondary hover:underline" onClick={() => editMember(member)}>
+                          Sửa
+                        </button>
+                        <button type="button" className="min-h-11 px-4 text-sm text-red-400 hover:text-red-300" onClick={() => void deleteMember(member)}>
+                          Xóa
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {!loading && members.length === 0 && (
+                    <tr><td colSpan={4} className="px-6 py-8 text-center italic text-secondary/60">Chưa có nhân khẩu.</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="imperial-card p-8">
-              <p className="text-secondary/60 font-playfair uppercase tracking-[0.2em] text-xs">Sự vụ chờ duyệt</p>
-              <h3 className="font-playfair text-5xl font-bold text-red-500 mt-2">{pendingCount}</h3>
+              <p className="text-secondary/60 font-playfair uppercase tracking-[0.2em] text-xs">Tổng nhân khẩu</p>
+              <p className="font-playfair text-5xl font-bold gold-gradient-text mt-2">{members.length}</p>
             </div>
             <div className="imperial-card p-8">
-              <p className="text-secondary/60 font-playfair uppercase tracking-[0.2em] text-xs">Tổng sớ ký</p>
-              <h3 className="font-playfair text-5xl font-bold gold-gradient-text mt-2">{requests.length}</h3>
+              <p className="text-secondary/60 font-playfair uppercase tracking-[0.2em] text-xs">Sự vụ chờ duyệt</p>
+              <p className="font-playfair text-5xl font-bold text-red-500 mt-2">{pendingCount}</p>
             </div>
             <div className="imperial-card p-8">
               <p className="text-secondary/60 font-playfair uppercase tracking-[0.2em] text-xs">Nhật ký gần đây</p>
-              <h3 className="font-playfair text-5xl font-bold gold-gradient-text mt-2">{audit.length}</h3>
+              <p className="font-playfair text-5xl font-bold gold-gradient-text mt-2">{audit.length}</p>
             </div>
           </div>
 

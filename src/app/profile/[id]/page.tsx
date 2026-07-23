@@ -1,19 +1,11 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RemoteImage from "@/components/RemoteImage";
-import {
-  getAllMemberIdsFromDb,
-  getMemberByIdFromDb,
-} from "@/lib/family-data";
+import { getMemberByIdFromDb } from "@/lib/family-data";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 type Props = { params: Promise<{ id: string }> };
-
-export async function generateStaticParams() {
-  const ids = await getAllMemberIdsFromDb();
-  return ids.map((id) => ({ id }));
-}
 
 export default async function ProfileByIdPage({ params }: Props) {
   const { id } = await params;
