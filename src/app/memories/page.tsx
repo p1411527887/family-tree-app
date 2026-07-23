@@ -98,7 +98,7 @@ export default function MemoriesPage() {
         </section>
 
         <section className="mb-16 px-margin-desktop max-w-container-max mx-auto">
-          <div className="flex justify-center gap-8 md:gap-12 overflow-x-auto pb-4" role="tablist" aria-label="Lọc thư viện">
+          <div className="flex justify-start md:justify-center gap-2 md:gap-8 lg:gap-12 overflow-x-auto pb-2 snap-x" role="tablist" aria-label="Lọc thư viện">
             {TABS.map((t) => {
               const active = tab === t.id;
               return (
@@ -108,7 +108,7 @@ export default function MemoriesPage() {
                   role="tab"
                   aria-selected={active}
                   onClick={() => setTab(t.id)}
-                  className={`pb-2 font-label-md text-label-md tracking-widest uppercase whitespace-nowrap transition-colors ${
+                  className={`min-h-11 px-3 py-2 snap-start font-label-md text-label-md tracking-widest uppercase whitespace-nowrap transition-colors ${
                     active
                       ? "text-secondary font-bold border-b-2 border-secondary"
                       : "text-on-surface-variant hover:text-secondary border-b-2 border-transparent"

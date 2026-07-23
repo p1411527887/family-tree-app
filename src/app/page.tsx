@@ -13,7 +13,7 @@ export default function Home() {
         <section className="relative min-h-[90vh] flex items-center overflow-hidden royal-gradient">
           <div className="absolute inset-0 opacity-20 citadel-pattern"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
-          <div className="max-w-container-max mx-auto px-gutter w-full grid md:grid-cols-2 gap-16 items-center relative z-10 py-20">
+          <div className="max-w-container-max mx-auto px-gutter w-full grid md:grid-cols-2 gap-10 md:gap-16 items-center relative z-10 py-16 md:py-20">
             <div className="space-y-10 text-center md:text-left">
               <div className="inline-block border-y border-secondary/40 py-2 mb-4">
                 <span className="text-secondary font-label-md tracking-[0.3em] uppercase text-xs">
@@ -44,7 +44,7 @@ export default function Home() {
             </div>
             <div className="flex justify-center relative">
               {/* Symmetrical Ornament Frame */}
-              <div className="relative p-12">
+              <div className="relative p-6 sm:p-12 max-w-full">
                 <div className="absolute inset-0 border-[12px] border-secondary/20 rounded-full animate-pulse"></div>
                 <div className="relative z-10 p-4 bg-wood shadow-2xl imperial-border">
                   <RemoteImage alt="Majestic golden Banyan tree on dark purple background" className="w-full max-w-md aspect-[4/5] object-cover filter brightness-90 sepia-[0.2]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4dr5rNcmBILzjWpqef7077cXfrRHtNT0ktleO2gVvXacX_czuibOw_VpLpeuaq9zaSckJ0tB9TcQv0qiT5s58uXI-6C39fXLJsGvgyYUgap6MCBfk_6rcfPzUciZiE3fUDZaVci05QbDdUWgCSnLd81uCdDoHjWIUxK3cfcz7-fZCBE_HK6XVi6ftrtXAqdeWZNJp5ZSVosXyzr1-Ty5SbGc_0UG_wkZ5HXJ9xDGg-fjQQNT7cF4QutsDfYYaAoQpJdTWRKnoOdk" width={480} height={600} />
@@ -66,11 +66,11 @@ export default function Home() {
               Lịch Sử Gia Tộc
             </h2>
             <div className="gold-divider mx-auto w-48 mb-8"></div>
-            <p className="font-editorial text-2xl text-on-surface/90 leading-[1.8] italic px-12 border-x-2 border-secondary/20">
+            <p className="font-editorial text-xl sm:text-2xl text-on-surface/90 leading-[1.8] italic px-4 sm:px-12 border-x-2 border-secondary/20">
               « Khởi nguồn từ linh khí của tổ tiên, trải qua ngàn năm văn hiến, gia tộc ta như dòng sông lớn cuộn chảy, bồi đắp phù sa cho những thế hệ mai sau nở rộ tài năng và đức độ. »
             </p>
 
-            <div className="grid grid-cols-3 gap-12 pt-12">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 pt-12">
               <div className="space-y-2">
                 <div className="text-4xl font-headline-xl text-secondary">MDCCCL</div>
                 <div className="text-xs font-label-md uppercase tracking-[0.2em] text-secondary/60">
@@ -107,10 +107,10 @@ export default function Home() {
               <div className="gold-divider w-32 mx-auto mt-6"></div>
             </div>
 
-            <Reveal className="relative overflow-x-auto pb-20">
-              <div className="flex flex-col items-center min-w-[900px] space-y-16">
+            <Reveal className="relative pb-12 md:pb-20">
+              <div className="flex flex-col items-center w-full space-y-10 md:space-y-16">
                 {/* Grandparents */}
-                <div className="flex gap-20">
+                <div className="flex gap-8 sm:gap-20">
                   <div className="text-center group">
                     <div className="portrait-frame mb-4 transform transition-transform group-hover:scale-105">
                       <RemoteImage alt="Chân dung Ông Cố" className="w-24 h-32 object-cover grayscale brightness-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0cWl9vpNJfW62iKkwsxUWNH9kQyB-ymE9D4zd7Rj5T4Y9YH6ox010MXuWJnhR8dYam1MCj7E8MRhoSDTfYqqIkGlwBICYNsRVKUd3dZAxCRrJ-Dm71fXLXVpGd-qU0NacyTBSEITFCPs2KHPqYwFx45QCYk7Ie8pQm78XUUfswLdu8Nhiwj78k8PupAhLgq_mTjLgJQraqxKZ2FqniOfVLi1M_SjnxCKXfb7HsNZkqjZCMxvadNP-kygp5NNrnSyofkZGD9pIzU0" width={96} height={128} />
@@ -130,7 +130,7 @@ export default function Home() {
                 <div className="w-0.5 h-16 bg-gradient-to-b from-secondary to-transparent"></div>
 
                 {/* Parents */}
-                <div className="flex gap-32">
+                <div className="flex gap-14 sm:gap-32">
                   <div className="text-center group relative">
                     <div className="absolute -top-8 left-1/2 w-32 h-px bg-secondary/20 -translate-x-1/2"></div>
                     <div className="portrait-frame mb-4 transform transition-transform group-hover:scale-105">
@@ -149,7 +149,7 @@ export default function Home() {
                 <div className="w-0.5 h-16 bg-gradient-to-b from-secondary/30 to-transparent"></div>
 
                 {/* Children */}
-                <div className="flex gap-16">
+                <div className="flex gap-5 sm:gap-16">
                   <div className="text-center group">
                     <div className="p-1 border border-secondary/30 mb-3 bg-wood">
                       <RemoteImage alt="Chân dung Con Trưởng" className="w-16 h-16 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnVtuj_WGeWkuhMpCEIvNL-Nis3EDAQTFF_2HY-g4GO34Du833c3BKW4duKNEkDx6GelvLlJTmQRv9Hvx9RO8MprjO0Y7_bwQ_I9uVoD_GR1qcgkoU7QZv_bwSFdZfwvmAB9pUCdVIIW7OphHFeWj8IQxuOGduJt1uCo0vDpZUL11gPRQ32wTnbVtaHpOWBkL0vNqXD4dRIYQVuz0y_2QXWooZhxKv2yCyJZlKHbK1osVyjUvlt9VwDeXm-pk_5UScZIhx-cfhOS4" width={64} height={64} />
@@ -177,11 +177,11 @@ export default function Home() {
         {/* Chronology: Imperial Scroll */}
         <section className="py-32 bg-primary/20 relative">
           <Reveal className="max-w-container-max mx-auto px-gutter">
-            <div className="flex items-center gap-8 mb-20">
-              <h2 className="font-headline-xl text-4xl gold-text shrink-0 uppercase tracking-widest">
+            <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-8 mb-14 sm:mb-20">
+              <h2 className="font-headline-xl text-3xl sm:text-4xl gold-text text-center sm:text-left uppercase tracking-wider sm:tracking-widest">
                 Niên Biểu Sự Kiện
               </h2>
-              <div className="h-px bg-secondary/30 grow"></div>
+              <div className="h-px w-24 sm:w-auto bg-secondary/30 sm:grow"></div>
             </div>
             <div className="space-y-16 relative before:absolute before:left-1/2 before:w-px before:h-full before:bg-secondary/20">
               {/* Event 1 */}
@@ -244,7 +244,7 @@ export default function Home() {
             <h2 className="font-headline-xl text-4xl gold-text italic">
               « Dù đi đâu, về đâu, dòng máu tổ tiên vẫn luôn chảy trong tim. »
             </h2>
-            <div className="flex justify-center gap-8">
+            <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-8">
               <Link
                 href="/login"
                 className="bg-secondary text-primary px-12 py-5 font-label-md text-sm tracking-widest hover:scale-105 transition-all shadow-2xl"

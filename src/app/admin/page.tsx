@@ -311,7 +311,29 @@ export default function AdminPage() {
                 Tải lại
               </button>
             </div>
-            <div className="overflow-x-auto">
+            <div className="divide-y divide-secondary/10 md:hidden">
+              {members.map((member) => (
+                <article key={member.id} className="p-5 space-y-4">
+                  <div>
+                    <h3 className="font-playfair text-lg font-bold text-secondary">{member.name}</h3>
+                    <p className="mt-1 text-sm text-on-surface/65">{member.generation} · {member.branch}</p>
+                    <p className="mt-1 text-sm text-on-surface/65">{member.role}</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button type="button" className="btn-imperial-outline min-h-11 px-4 text-sm" onClick={() => editMember(member)}>
+                      Sửa
+                    </button>
+                    <button type="button" className="min-h-11 border border-red-400/60 px-4 text-sm text-red-300 hover:bg-red-950/30" onClick={() => void deleteMember(member)}>
+                      Xóa
+                    </button>
+                  </div>
+                </article>
+              ))}
+              {!loading && members.length === 0 && (
+                <p className="px-6 py-8 text-center italic text-secondary/60">Chưa có nhân khẩu.</p>
+              )}
+            </div>
+            <div className="hidden overflow-x-auto md:block">
               <table className="w-full min-w-[720px] text-left border-collapse">
                 <thead>
                   <tr className="bg-black/30 border-b border-secondary/10 text-xs uppercase tracking-widest text-secondary/60">

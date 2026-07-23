@@ -32,9 +32,9 @@ export default async function AnalyticsPage() {
     <>
       <Header />
       <main className="pt-24 min-h-screen analytics-theme">
-        <div className="h-16 flex items-center justify-between px-margin-desktop border-b border-primary/10 bg-black/40">
+        <div className="min-h-16 flex items-center justify-between gap-3 px-margin-desktop py-2 border-b border-primary/10 bg-black/40">
           <nav
-            className="flex items-center gap-3 font-label-md text-sm text-primary/80 uppercase tracking-widest"
+            className="min-w-0 flex items-center gap-2 font-label-md text-xs sm:text-sm text-primary/80 uppercase tracking-wider sm:tracking-widest"
             aria-label="Breadcrumb"
           >
             <Link href="/" className="hover:text-primary">
@@ -43,7 +43,7 @@ export default async function AnalyticsPage() {
             <span className="material-symbols-outlined text-xs" aria-hidden>
               chevron_right
             </span>
-            <span className="text-primary font-bold border-b border-primary/50">
+            <span className="truncate text-primary font-bold border-b border-primary/50">
               Thống kê dòng tộc
             </span>
           </nav>
@@ -128,27 +128,27 @@ export default async function AnalyticsPage() {
             </p>
           )}
 
-          <section className="bento-grid">
-            <div className="col-span-12 lg:col-span-8 imperial-card p-10">
-              <div className="flex justify-between items-center mb-12">
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-8 imperial-card p-5 sm:p-10 min-w-0">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-10 sm:mb-12">
                 <h3 className="font-headline-md text-headline-md text-primary italic">
                   Sự phát triển qua các đời
                 </h3>
-                <div className="flex gap-4 items-center">
+                <div className="flex gap-3 items-center">
                   <span className="w-3 h-3 border border-primary bg-primary shadow-[0_0_8px_#FFD700]" />
                   <span className="font-label-md text-sm text-primary/80 tracking-wide uppercase">
                     Số lượng thành viên
                   </span>
                 </div>
               </div>
-              <div className="relative h-72 flex items-end justify-between px-8 gap-4 overflow-x-auto">
+              <div className="relative h-72 flex items-end justify-between px-2 sm:px-8 gap-2 sm:gap-4 overflow-hidden">
                 {genBars.length === 0 ? (
                   <p className="text-primary/50 italic w-full text-center self-center">
                     Chưa có dữ liệu đời.
                   </p>
                 ) : (
                   genBars.map((bar) => (
-                    <div key={bar.label} className="flex-1 min-w-[3rem] flex flex-col items-center group">
+                    <div key={bar.label} className="flex-1 min-w-0 flex flex-col items-center group">
                       <div
                         className="w-full bg-gradient-to-t from-secondary/80 to-primary border-x border-t border-primary/50 transition-all duration-700 group-hover:brightness-125 relative"
                         style={{ height: bar.h }}
@@ -157,7 +157,7 @@ export default async function AnalyticsPage() {
                           {bar.n}
                         </span>
                       </div>
-                      <p className="mt-6 font-label-md text-xs text-primary/80 uppercase tracking-widest text-center">
+                      <p className="mt-6 font-label-md text-[10px] sm:text-xs text-primary/80 uppercase tracking-normal sm:tracking-widest text-center">
                         {bar.label}
                       </p>
                     </div>
@@ -172,13 +172,13 @@ export default async function AnalyticsPage() {
               </div>
             </div>
 
-            <div className="col-span-12 lg:col-span-4 imperial-card p-10 flex flex-col">
+            <div className="lg:col-span-4 imperial-card p-5 sm:p-10 flex flex-col min-w-0">
               <h3 className="font-headline-md text-headline-md text-primary italic mb-10 text-center">
                 Tỷ lệ Cân bằng
               </h3>
               <div className="flex-1 flex items-center justify-center relative">
                 <div
-                  className="w-52 h-52 rounded-full flex items-center justify-center relative border-4 border-primary/30 p-2 overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.2)]"
+                  className="w-44 h-44 sm:w-52 sm:h-52 rounded-full flex items-center justify-center relative border-4 border-primary/30 p-2 overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.2)]"
                   style={{
                     background:
                       genderKnown > 0
@@ -188,7 +188,7 @@ export default async function AnalyticsPage() {
                   role="img"
                   aria-label={`Biểu đồ tỷ lệ nam ${malePct}% nữ ${femalePct}%`}
                 >
-                  <div className="w-36 h-36 bg-surface/90 rounded-full z-10 flex flex-col items-center justify-center border-2 border-primary/50">
+                  <div className="w-28 h-28 sm:w-36 sm:h-36 bg-surface/90 rounded-full z-10 flex flex-col items-center justify-center border-2 border-primary/50">
                     <span className="font-headline-lg text-primary text-3xl italic">{ratio}</span>
                     <span className="font-caption text-[10px] text-primary/70 uppercase tracking-widest mt-1">
                       Nam / Nữ
